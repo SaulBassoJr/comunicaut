@@ -15,7 +15,7 @@ function Home() {
     return (
         <section class="main_section">
             <div class="wrapper_theme">
-                <a href="">
+                <a href="/Pessoas">
                     <figure class="figure_card">
                         <img class="icon" src={pessoa} alt="Figura de duas pessoas"/>
                             <figcaption>PESSOAS</figcaption>
