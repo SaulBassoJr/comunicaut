@@ -1,7 +1,10 @@
 .main_title{
     color: #000;
-    font-size: 38px;
+    font-size: 30px;
     text-align: center;
+}
+.main_title.-pessoas{
+    font-size: 40px;
 }
 
 
