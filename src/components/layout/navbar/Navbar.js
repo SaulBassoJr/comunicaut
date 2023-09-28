@@ -6,7 +6,7 @@ function Navbar() {
         <header class="main_header">
             <nav id="menu" class="menu">
                 <a class="main_action" href="/"> Home </a>
-                <a class="main_action" href="galeria.html"> Galeria de Criação </a>
+                <a class="main_action" href="/GaleriaCriação"> Galeria de Criação </a>
             </nav>
         </header>
     )
