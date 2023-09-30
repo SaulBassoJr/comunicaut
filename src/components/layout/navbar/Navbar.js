@@ -3,10 +3,10 @@ import './main_action.css';
 
 function Navbar() {
     return (
-        <header class="main_header">
-            <nav id="menu" class="menu">
-                <a class="main_action" href="/"> Home </a>
-                <a class="main_action" href="/GaleriaCriação"> Galeria de Criação </a>
+        <header className="main_header">
+            <nav id="menu" className="menu">
+                <a className="main_action" href="/"> Home </a>
+                <a className="main_action" href="/GaleriaCriação"> Galeria de Criação </a>
             </nav>
         </header>
     )
