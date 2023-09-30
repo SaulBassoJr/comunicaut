@@ -10,10 +10,23 @@ import { useState } from 'react';
 
 function Galeria() {
     const [cards, setCards] = useState([]);
+    const [prancha, setPrancha] = useState([]);
     const [openModal, setOpenModal] = useState(false);
 
     const addCard = (card) => {
         setCards([...cards, card]);
+    };
+
+    const moveToPrancha = (index) => {
+        const cardToMove = cards[index];
+        setPrancha([...prancha, cardToMove]);
+        setCards(cards.filter((_, i) => i !== index));
+    };
+
+    const removeFromPrancha = (index) => {
+        const cardToRemove = prancha[index];
+        setCards([...cards, cardToRemove]);
+        setPrancha(prancha.filter((_, i) => i !== index));
     };
 
     return (
@@ -25,7 +38,7 @@ function Galeria() {
                         <ul className='wrapper_card'>
                             {cards.map((card, index) => (
                                 <li  key={index}>
-                                    <div className='galeria_card' style={{ backgroundColor: card.backgroundColor }}>
+                                    <div onClick={() => moveToPrancha(index)} id="moveToPranchaBtn" className='galeria_card' style={{ backgroundColor: card.backgroundColor }}>
                                         <img className='img' src={card.imgSrc} alt="Pré-visualização" />
                                         <h2 className='title'>{card.title}</h2>
                                     </div>
@@ -37,6 +50,16 @@ function Galeria() {
                 </div>
                 <div className="div-prancha ">
                     <h2 className="main_title">PRANCHA</h2>
+                    <ul className='wrapper_card'>
+                        {prancha.map((card, index) => (
+                            <li key={index}>
+                                <div onClick={() => removeFromPrancha(index)} className='galeria_card' style={{ backgroundColor: card.backgroundColor }}>
+                                    <img className='img' src={card.imgSrc} alt="Pré-visualização" />
+                                    <h2 className='title'>{card.title}</h2>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
             <div>
