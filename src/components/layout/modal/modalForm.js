@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 function Modal({ isOpen, closeOpen, onSaveCard }) {
     const [cardInfo, setCardInfo] = useState({
         imgSrc: "",
-        backgroundColor: "#ffffff",
+        backgroundColor: 'white',
         title: "Título da imagem",
         audioSrc: "",
         audioName: ""
@@ -26,15 +26,6 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
         });
     }, [isOpen]); // Execute isso quando o modal é aberto
 
-    // const handleInputChange = (event) => {
-    //     const { id, value } = event.target;
-    //     setCardInfo({
-    //         ...cardInfo,
-    //         [id]: value
-    //     });
-    // };
-
-
     const handleInputChange = (event) => {
         const { id, files, value } = event.target;
     
@@ -44,6 +35,16 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                 setCardInfo({
                     ...cardInfo,
                     imgSrc: e.target.result
+                });
+            };
+            reader.readAsDataURL(files[0]);
+        } else if (id === 'audioInput' && files && files[0]) {
+            // Este bloco é acionado quando o usuário seleciona um arquivo de áudio
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setCardInfo({
+                    ...cardInfo,
+                    audioSrc: e.target.result
                 });
             };
             reader.readAsDataURL(files[0]);
@@ -69,18 +70,28 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                 });
             }
         }
+        localStorage.setItem('savedCardInfo', JSON.stringify(cardInfo));
     };  
 
     const handleSaveCard = () => {
         const newCard = {
             imgSrc: imgPreviewRef.current?.src || '',
-            backgroundColor: colorPickerRef.current?.value || '#ffffff',
+            backgroundColor: colorPickerRef.current?.value || '#ffff',
             title: titleInputRef.current?.value || 'Título da imagem',
-            audioSrc: audioElementRef.current?.src || '',
-            audioName: '' // Você precisa obter o nome do arquivo de áudio, se necessário
+            audioSrc: audioElementRef.current?.src || '' || '',
+            audioName: '' 
         };
         onSaveCard(newCard);
     };
+    const handlePlayPauseAudio = () => {
+        const audioElement = audioElementRef.current;
+      
+        if (audioElement.paused) {
+          audioElement.play();
+        }else {
+          audioElement.pause();
+        }
+      };
 
     if (isOpen) {
         return (
@@ -91,32 +102,44 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                     </div>
                     <div className="wrapper_insputs">
                         <div>
-                            <div>
+                            <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }}>
                                 <div id="fileInputContainer"></div>
-                                <img ref={imgPreviewRef} src={cardInfo.imgSrc} style={{ backgroundColor: cardInfo.backgroundColor }} alt="Pré-visualização da imagem" />
-                                <h1>{cardInfo.title}</h1>
+                                <img ref={imgPreviewRef} src={cardInfo.imgSrc}  alt="Pré-visualização da imagem" />
+                                <h1 className='title'>{cardInfo.title}</h1>
                             </div>
                         </div>
                         <div>
                             <input className="inputs" type="file" id="fileInput" accept="image/*" onChange={handleInputChange} />
-                            <span id="imageNameDisplay"></span>
+                            {/* <span id="imageNameDisplay"></span> */}
                         </div>
                         <div>
-                            <input className="inputs" type="file" id="audioInput" accept="audio/*" />
+                            <input className="inputs" type="file" id="audioInput" accept="audio/*" onChange={handleInputChange} />
                         </div>
                         <div>
                             <label>*Escolher cor de fundo:</label>
-                            <input className="inputs" type="color" id="colorPicker" ref={colorPickerRef} onChange={handleInputChange} />
+                            <input className="inputs" type="color" id="colorPicker" ref={colorPickerRef} onChange={handleInputChange} value={cardInfo.backgroundColor}/>
                         </div>
                         <div>
                             <label>*Título do cartão:</label>
                             <input className="inputs" type="text" id="titleInput" placeholder="Insira o título do cartão" ref={titleInputRef} onChange={handleInputChange}/>
                         </div>
                         <div>
-                            <button className="styleButton" id="playPauseButton">Reproduzir</button>
-                            <audio id="audioElement" ref={audioElementRef}></audio>
+                            {/* <button className="styleButton" id="playPauseButton" onClick={handlePlayPauseAudio}>
+                                {audioElementRef.current?.paused ? 'Reproduzir' : 'Pausar'}
+                            </button>
+                             <audio id="audioElement" ref={audioElementRef} src={cardInfo.audioSrc}></audio>  */}
+                             {cardInfo.audioSrc ? (
+                                <div>
+                                    <audio className='inputs' controls>
+                                        <source ref={audioElementRef} src={cardInfo.audioSrc} type="audio/mp3" />
+                                        Seu navegador não suporta o elemento de áudio.
+                                    </audio>
+                                </div>
+                            ) : (
+                                <p>Áudio não disponível para reprodução</p>
+                            )}
                         </div>
-                        <button onClick={handleSaveCard} className="styleButton" id="addButton">Salvar Cartão</button>
+                        <button onClick={() => { handleSaveCard(); closeOpen(); }} className="styleButton" id="addButton">Salvar Cartão</button>
                         <button className="styleButton" id="resetAllButton">Resetar Cartão</button>
                     </div>
                 </div>
