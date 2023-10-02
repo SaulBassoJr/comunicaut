@@ -15,24 +15,41 @@
 }
 
 .wrapper_galeria .div-galeria {
-    width: 350px;
-    min-height: 500px;
+    width: 370px;
+    min-height: 580px;
+    max-height: auto;
+    text-align: center;
+    border: 2px solid #000;
+    background: #FFF;
+    padding: 10px 20px 5px 20px;
+}
+
+.wrapper_galeria .div-cardg {
+    height: 500px;
+    overflow: auto;
+    border: 2px solid #000;
+}
+.addBtngalery{
+    height: 30px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+.addBtngalery:hover{
+    background-color: #00FF00;
+    font-weight: bold;
+}
+
+.wrapper_galeria .div-prancha {
+    width: 800px;
+    min-height: 580px;
     max-height: auto;
     text-align: center;
     border: 2px solid #000;
     background: #FFF;
     padding: 10px 20px;
-}
-
-.wrapper_galeria .div-prancha {
-    width: 750px;
-    min-height: 500px;
-    max-height: auto;
-    text-align: center;
-    border: 2px solid #000;
-    background: #FFF;
-    padding: 10px 50px;
-    margin-left: 50px;
+    margin-left: 10px;
 }
 
 @media (max-width: 500px) {

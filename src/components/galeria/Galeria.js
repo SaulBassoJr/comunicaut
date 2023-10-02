@@ -4,7 +4,7 @@ import '../layout/main_title.css';
 import './galeria_card.css';
 import './wrapper_galeria.css';
 import './prancha_card.css';
-import './modal_form.css';
+
 
 import Modal from '../layout/modal/modalForm';
 import ConfirmationModal from '../layout/modal/modalIncer';
@@ -32,13 +32,19 @@ function Galeria() {
     };
 
     const confirmMoveToPrancha = () => {
-        if (selectedCard) {
-            setPrancha([...prancha, selectedCard]);
-            setCards(cards.filter((_, i) => i !== cards.indexOf(selectedCard)));
-            setSelectedCard(null);
-            setOpenModalConf(false);
+        const MAX_PRANCHA_SIZE = 15;
+        if (prancha.length < MAX_PRANCHA_SIZE) {
+            if (selectedCard) {
+                setPrancha([...prancha, selectedCard]);
+                setCards(cards.filter((_, i) => i !== cards.indexOf(selectedCard)));
+                setSelectedCard(null);
+                setOpenModalConf(false);
+            }
+        } else {
+            alert('A prancha está cheia. Não é possível adicionar mais figuras.');
         }
     };
+
 
     const removeFromPrancha = (index) => {
         const cardToRemove = prancha[index];
@@ -53,7 +59,7 @@ function Galeria() {
             <div className="wrapper_galeria">
                 <div className="div-galeria">
                     <h2 className="main_title">GALERIA</h2>
-                    <div className="">
+                    <div className="div-cardg">
                         <ul className='wrapper_card'>
                             {cards.map((card, index) => (
                                 <li key={index}>
@@ -75,29 +81,37 @@ function Galeria() {
                             ))}
                         </ul>
                     </div>
-                    <button onClick={() => setOpenModal(true)} id="addCardBtn">Adicionar Cartão</button>
+                    <button
+                        className='addBtngalery'
+                        onClick={() => setOpenModal(true)}
+                        id="addCardBtn"
+                    >
+                        Adicionar Cartão
+                    </button>
                 </div>
                 <div className="div-prancha ">
                     <h2 className="main_title">PRANCHA</h2>
-                    <ul className='wrapper_pranchaCard'>
-                        {prancha.map((card, index) => (
-                            <li key={index}>
-                                <div
-                                    onClick={() => removeFromPrancha(index)}
-                                    className='prancha_card'
-                                    style={{ backgroundColor: card.backgroundColor }}
-                                >
-                                    <img className='img' src={card.imgSrc} alt="Pré-visualização" />
-                                    <h2 
-                                        className='title'
-                                        style={{ fontSize: `${Math.min(28, 270 / card.title.length)}px` }}
+                    <div>
+                        <ul className='wrapper_pranchaCard'>
+                            {prancha.map((card, index) => (
+                                <li key={index}>
+                                    <div
+                                        onClick={() => removeFromPrancha(index)}
+                                        className='prancha_card'
+                                        style={{ backgroundColor: card.backgroundColor }}
                                     >
-                                        {card.title}
-                                    </h2>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                                        <img className='img' src={card.imgSrc} alt="Pré-visualização" />
+                                        <h2
+                                            className='title'
+                                            style={{ fontSize: `${Math.min(28, 270 / card.title.length)}px` }}
+                                        >
+                                            {card.title}
+                                        </h2>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div>

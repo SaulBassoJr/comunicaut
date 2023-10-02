@@ -9,9 +9,9 @@
     border: 3px  solid #000;
     width: 80px;
     height: 90px;
+    cursor: pointer;
     margin-bottom: 20px;
     margin-right: 20px;
-
 }
 
 .galeria_card .img{
@@ -28,6 +28,5 @@
     display:flex;
     flex-wrap: wrap;
     padding-left: 26px;
-    
 }
 

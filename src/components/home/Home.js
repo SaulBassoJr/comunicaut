@@ -1,6 +1,5 @@
 import '../layout/reset.css';
 import '../layout/main_section.css';
-import '../layout/main_title.css';
 import './figure_card.css';
 import './wrapper_theme.css';
 import pessoa from '../../assets/img/teste.png';
