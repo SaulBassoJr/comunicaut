@@ -1,7 +1,7 @@
 import React from 'react';
 import './main_modal.css';
 
-const ConfirmationModal = ({ isOpen, closeModal, onConfirm, cardInfo }) => {
+const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }) => {
   if (isOpen) {
     return (
       <div className="main_modal" >
@@ -10,7 +10,7 @@ const ConfirmationModal = ({ isOpen, closeModal, onConfirm, cardInfo }) => {
             <button className="closeButton" onClick={closeModal}>&times;</button>
           </div>
           <div className='titleModal'>
-           <h1 >Deseja mover o cartão para a Prancha?</h1>
+            <h1 >Deseja mover o cartão para a Prancha?</h1>
           </div>
           <div className="wrapper_insputs -mprancha">
             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }} >
@@ -27,7 +27,18 @@ const ConfirmationModal = ({ isOpen, closeModal, onConfirm, cardInfo }) => {
             ) : (
               <p>Áudio não disponível</p>
             )}
-            <button className="styleButton" onClick={() => { onConfirm(); closeModal(); }}>Confirmar</button>
+            <button
+              className="styleButton"
+              onClick={() => { onConfirm(); closeModal(); }}
+            >
+              Confirmar
+            </button>
+            <button
+              className="styleButtonReset"
+              onClick={() => { onDelete(); closeModal(); }}
+            >
+              Excluir
+            </button>
           </div>
         </div>
       </div>
