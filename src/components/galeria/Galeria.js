@@ -4,10 +4,12 @@ import '../layout/main_title.css';
 import './galeria_card.css';
 import './wrapper_galeria.css';
 import './prancha_card.css';
-
+import './print.css';
+import { IoPrint } from "react-icons/io5";
 
 import Modal from '../layout/modal/modalForm';
 import ConfirmationModal from '../layout/modal/modalIncer';
+import ConfirmationModalRemov from '../layout/modal/modalRemov';
 import { useState } from 'react';
 
 function Galeria() {
@@ -15,20 +17,38 @@ function Galeria() {
     const [prancha, setPrancha] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [openModalConf, setOpenModalConf] = useState(false);
+    const [openModalConfRemov, setOpenModalConfRemov] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
 
     const addCard = (card) => {
         setCards([...cards, card]);
     };
 
-    // const moveToPrancha = (index) => {
-    //     const cardToMove = cards[index];
-    //     setPrancha([...prancha, cardToMove]);
-    //     setCards(cards.filter((_, i) => i !== index));
-    // };
+
     const openConfirmationModal = (index) => {
         setSelectedCard(cards[index]);
         setOpenModalConf(true);
+    };
+
+    const openConfirmationModalRemov = (index) => {
+        setSelectedCard(prancha[index]);
+        setOpenModalConfRemov(true);
+    };
+
+    const removeCard = () => {
+        if (selectedCard) {
+            setCards(cards.filter((_, i) => i !== cards.indexOf(selectedCard)));
+            setSelectedCard(null);
+            setOpenModalConf(false);
+        }
+    };
+
+    const removeCardPrancha = () => {
+        if (selectedCard) {
+            setPrancha(prancha.filter((_, i) => i !== prancha.indexOf(selectedCard)));
+            setSelectedCard(null);
+            setOpenModalConfRemov(false);
+        }
     };
 
     const confirmMoveToPrancha = () => {
@@ -45,14 +65,20 @@ function Galeria() {
         }
     };
 
+    const confirmRemoveFromPrancha = () => {
+        if (selectedCard) {
+            setPrancha(prancha.filter((_, i) => i !== prancha.indexOf(selectedCard))); // Atualiza o estado da prancha
+            setCards([...cards, selectedCard]); // Adiciona o cartão removido de volta à galeria
+            setSelectedCard(null);
+            setOpenModalConfRemov(false);
+        }
+    }
 
-    const removeFromPrancha = (index) => {
-        const cardToRemove = prancha[index];
-        setCards([...cards, cardToRemove]);
-        setPrancha(prancha.filter((_, i) => i !== index));
+    const handlePrint = () => {
+        window.print();
     };
 
-
+    const [isPrinting, setIsPrinting] = useState(false);
 
     return (
         <section className="main_section">
@@ -90,14 +116,25 @@ function Galeria() {
                     </button>
                 </div>
                 <div className="div-prancha ">
-                    <h2 className="main_title">PRANCHA</h2>
+                    <div className='div_title'>
+                        <h2 className="main_title">PRANCHA</h2>
+                        <button className="imprimeButton"
+                            onClick={() => {
+                                setIsPrinting(true);
+                                window.print();
+                                setIsPrinting(false);
+                            }}
+                        >
+                            <IoPrint /> Imprimir Prancha
+                        </button>
+                    </div>
                     <div>
                         <ul className='wrapper_pranchaCard'>
                             {prancha.map((card, index) => (
                                 <li key={index}>
                                     <div
-                                        onClick={() => removeFromPrancha(index)}
-                                        className='prancha_card'
+                                        onClick={() => openConfirmationModalRemov(index)}
+                                        className={`prancha_card ${isPrinting ? 'print-card' : ''}`}
                                         style={{ backgroundColor: card.backgroundColor }}
                                     >
                                         <img className='img' src={card.imgSrc} alt="Pré-visualização" />
@@ -120,6 +157,14 @@ function Galeria() {
                     isOpen={openModalConf}
                     closeModal={() => setOpenModalConf(false)}
                     onConfirm={confirmMoveToPrancha}
+                    onDelete={removeCard}
+                    cardInfo={selectedCard || {}}
+                />
+                <ConfirmationModalRemov
+                    isOpen={openModalConfRemov}
+                    closeModal={() => setOpenModalConfRemov(false)}
+                    onConfirm={confirmRemoveFromPrancha}
+                    onDelete={removeCardPrancha}
                     cardInfo={selectedCard || {}}
                 />
             </div>

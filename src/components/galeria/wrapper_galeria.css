@@ -52,6 +52,34 @@
     margin-left: 10px;
 }
 
+.div-prancha .div_title{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.imprimeButton{
+    display: flex;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    border: 2px solid #000;
+    cursor: pointer;
+    border-radius: 3px;
+    align-items: center;
+    justify-content: space-around;
+    width: 150px;
+    height: 30px;
+}
+
+.imprimeButton:hover{
+    background-color: #000;
+    color: #FFF;
+    font-weight: bold;
+    border: 3px solid #B5B5B5;
+}
+
 @media (max-width: 500px) {
     .wrapper_galeria .project_card {
         width: 200px;

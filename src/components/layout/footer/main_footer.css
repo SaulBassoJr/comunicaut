@@ -3,6 +3,7 @@
     justify-content: center;
     background-color: #00BFFF;
     color: #fff;
+    border-top: 5px solid #000;
     padding-top: 20px;
     padding-bottom: 20px;
 }
