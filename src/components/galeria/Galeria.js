@@ -4,13 +4,16 @@ import '../layout/main_title.css';
 import './galeria_card.css';
 import './wrapper_galeria.css';
 import './prancha_card.css';
-import './print.css';
-import { IoPrint } from "react-icons/io5";
+import { IoPrintOutline, IoCloudUploadOutline } from "react-icons/io5";
+
+import ReactToPrint from 'react-to-print';
+
 
 import Modal from '../layout/modal/modalForm';
 import ConfirmationModal from '../layout/modal/modalIncer';
 import ConfirmationModalRemov from '../layout/modal/modalRemov';
-import { useState } from 'react';
+import ConfirmDelet from '../layout/modal/modalConfirmDelet';
+import { useState, useRef } from 'react';
 
 function Galeria() {
     const [cards, setCards] = useState([]);
@@ -19,6 +22,10 @@ function Galeria() {
     const [openModalConf, setOpenModalConf] = useState(false);
     const [openModalConfRemov, setOpenModalConfRemov] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
+    const printRef = useRef();
+    const [confirmDeleteCard, setConfirmDeleteCard] = useState(false);  // Estado para confirmar exclusão do card
+    const [confirmDeletePrancha, setConfirmDeletePrancha] = useState(false);
+
 
     const addCard = (card) => {
         setCards([...cards, card]);
@@ -36,19 +43,38 @@ function Galeria() {
     };
 
     const removeCard = () => {
+        // if (selectedCard) {
+        //     setCards(cards.filter((_, i) => i !== cards.indexOf(selectedCard)));
+        //     setSelectedCard(null);
+        //     setOpenModalConf(false);
+        // }
         if (selectedCard) {
-            setCards(cards.filter((_, i) => i !== cards.indexOf(selectedCard)));
-            setSelectedCard(null);
-            setOpenModalConf(false);
+            setConfirmDeleteCard(true); // Exibe a confirmação
         }
     };
 
+   const confirmDeleteCardd = () => {
+        setCards(cards.filter((_, i) => i !== cards.indexOf(selectedCard)));
+        setSelectedCard(null);
+        setOpenModalConf(false);
+        setConfirmDeleteCard(false); // Fecha a confirmação
+    };
+
+
     const removeCardPrancha = () => {
         if (selectedCard) {
-            setPrancha(prancha.filter((_, i) => i !== prancha.indexOf(selectedCard)));
-            setSelectedCard(null);
-            setOpenModalConfRemov(false);
+            // setPrancha(prancha.filter((_, i) => i !== prancha.indexOf(selectedCard)));
+            // setSelectedCard(null);
+            // setOpenModalConfRemov(false);
+            setConfirmDeletePrancha(true); // Exibe a confirmação
         }
+    };
+
+    const confirmDeletePranchaa = () => {
+        setPrancha(prancha.filter((_, i) => i !== prancha.indexOf(selectedCard)));
+        setSelectedCard(null);
+        setOpenModalConfRemov(false);
+        setConfirmDeletePrancha(false); // Fecha a confirmação
     };
 
     const confirmMoveToPrancha = () => {
@@ -73,12 +99,6 @@ function Galeria() {
             setOpenModalConfRemov(false);
         }
     }
-
-    const handlePrint = () => {
-        window.print();
-    };
-
-    const [isPrinting, setIsPrinting] = useState(false);
 
     return (
         <section className="main_section">
@@ -112,29 +132,24 @@ function Galeria() {
                         onClick={() => setOpenModal(true)}
                         id="addCardBtn"
                     >
-                        Adicionar Cartão
+                        <IoCloudUploadOutline /> Adicionar Cartão
                     </button>
                 </div>
                 <div className="div-prancha ">
                     <div className='div_title'>
                         <h2 className="main_title">PRANCHA</h2>
-                        <button className="imprimeButton"
-                            onClick={() => {
-                                setIsPrinting(true);
-                                window.print();
-                                setIsPrinting(false);
-                            }}
-                        >
-                            <IoPrint /> Imprimir Prancha
-                        </button>
+                        <ReactToPrint
+                            trigger={() => <button className="imprimeButton"> <IoPrintOutline /> Imprimir Prancha</button>}
+                            content={() => printRef.current}
+                        />
                     </div>
-                    <div>
+                    <div ref={printRef}>
                         <ul className='wrapper_pranchaCard'>
                             {prancha.map((card, index) => (
                                 <li key={index}>
                                     <div
                                         onClick={() => openConfirmationModalRemov(index)}
-                                        className={`prancha_card ${isPrinting ? 'print-card' : ''}`}
+                                        className='prancha_card'
                                         style={{ backgroundColor: card.backgroundColor }}
                                     >
                                         <img className='img' src={card.imgSrc} alt="Pré-visualização" />
@@ -166,6 +181,18 @@ function Galeria() {
                     onConfirm={confirmRemoveFromPrancha}
                     onDelete={removeCardPrancha}
                     cardInfo={selectedCard || {}}
+                />
+                <ConfirmDelet
+                    isOpen={confirmDeleteCard}
+                    onCancel={() => setConfirmDeleteCard(false)}
+                    onConfirm={confirmDeleteCardd}
+                />
+
+                {/* Componente ConfirmDelet para exclusão da prancha */}
+                <ConfirmDelet
+                    isOpen={confirmDeletePrancha}
+                    onCancel={() => setConfirmDeletePrancha(false)}
+                    onConfirm={confirmDeletePranchaa}
                 />
             </div>
         </section>

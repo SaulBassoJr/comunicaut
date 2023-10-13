@@ -1,7 +1,16 @@
 import React from 'react';
 import './main_modal.css';
+import ConfirmDelet from './modalConfirmDelet';
+import { useState } from 'react';
+import { IoTrashOutline, IoAddCircleOutline } from "react-icons/io5";
 
 const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }) => {
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  if (!cardInfo) {
+    return null; // Retorna null se cardInfo for undefined ou null
+  }
+
+  const { backgroundColor, imgSrc, title, audioSrc } = cardInfo;
   if (isOpen) {
     return (
       <div className="main_modal" >
@@ -10,7 +19,7 @@ const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }
             <button className="closeButton" onClick={closeModal}>&times;</button>
           </div>
           <div className='titleModal'>
-            <h1 >Deseja mover o cartão para a Prancha?</h1>
+            <h1 >Deseja adicionar o cartão a Prancha?</h1>
           </div>
           <div className="wrapper_insputs -mprancha">
             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }} >
@@ -27,18 +36,20 @@ const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }
             ) : (
               <p>Áudio não disponível</p>
             )}
-            <button
-              className="styleButton"
-              onClick={() => { onConfirm(); closeModal(); }}
-            >
-              Confirmar
-            </button>
-            <button
-              className="styleButtonReset"
-              onClick={() => { onDelete(); closeModal(); }}
-            >
-              Excluir
-            </button>
+            <div className='divButton'>
+              <button
+                className="styleButton -confirm"
+                onClick={() => { onConfirm(); closeModal(); }}
+              >
+                <IoAddCircleOutline /> Adicionar a Prancha
+              </button>
+              <button
+                className="styleButtonReset -excluir"
+                onClick={ onDelete }
+              >
+                <IoTrashOutline /> Excluir Cartão
+              </button>
+            </div>
           </div>
         </div>
       </div>

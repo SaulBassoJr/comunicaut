@@ -1,5 +1,6 @@
 import React from 'react';
 import './main_modal.css';
+import { IoTrashOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 const ConfirmationModalRemov = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }) => {
   if (isOpen) {
@@ -10,7 +11,7 @@ const ConfirmationModalRemov = ({ isOpen, closeModal, onConfirm, onDelete, cardI
             <button className="closeButton" onClick={closeModal}>&times;</button>
           </div>
           <div className='titleModal'>
-            <h1 >Deseja mover o cartão para a Galeria?</h1>
+            <h1 >Deseja remover o cartão da Prancha?</h1>
           </div>
           <div className="wrapper_insputs -mprancha">
             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }} >
@@ -27,18 +28,20 @@ const ConfirmationModalRemov = ({ isOpen, closeModal, onConfirm, onDelete, cardI
             ) : (
               <p>Áudio não disponível</p>
             )}
-            <button
-              className="styleButton"
-              onClick={() => { onConfirm(); closeModal(); }}
-            >
-              Confirmar
-            </button>
-            <button
-              className="styleButtonReset"
-              onClick={() => { onDelete(); closeModal(); }}
-            >
-              Excluir
-            </button>
+            <div className='divButton'>
+              <button
+                className="styleButton -confirm"
+                onClick={() => { onConfirm(); closeModal(); }}
+              >
+                <IoRemoveCircleOutline/> Remover da Prancha
+              </button>
+              <button
+                className="styleButtonReset -excluir"
+                onClick={ onDelete }
+              >
+                <IoTrashOutline/> Excluir Cartão
+              </button>
+            </div>
           </div>
         </div>
       </div>

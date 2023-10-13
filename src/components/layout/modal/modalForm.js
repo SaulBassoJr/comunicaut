@@ -1,5 +1,6 @@
 import './main_modal.css';
 import { useState, useEffect, useRef } from 'react';
+import { IoSaveOutline, IoSyncCircleOutline } from "react-icons/io5";
 
 function Modal({ isOpen, closeOpen, onSaveCard }) {
     const [cardInfo, setCardInfo] = useState({
@@ -15,13 +16,23 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
     const titleInputRef = useRef(null);
     const audioElementRef = useRef(null);
 
+    const [feedbackMessage, setFeedbackMessage] = useState(null);
+
+    const displayFeedback = (message) => {
+        setFeedbackMessage(message);
+        // Remover a mensagem após algum tempo (por exemplo, 3 segundos)
+        setTimeout(() => {
+            setFeedbackMessage(null);
+        }, 3000);
+    };
+
     useEffect(() => {
         // Atualize o cardInfo com os valores iniciais dos elementos
         setCardInfo({
             ...cardInfo,
-            imgSrc: imgPreviewRef.current?.src || '',
+            imgSrc: imgPreviewRef.current?.src,
             backgroundColor: colorPickerRef.current?.value || '#ffffff',
-            title: titleInputRef.current?.value || 'Título da imagem',
+            title: titleInputRef.current?.value,
             audioSrc: audioElementRef.current?.src || ''
         });
     }, [isOpen]); // Execute isso quando o modal é aberto
@@ -74,30 +85,34 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
     };
 
     const handleSaveCard = () => {
+        if (!cardInfo.imgSrc && !cardInfo.title) {
+            displayFeedback('Por favor, adicione a imagem e o título antes de salvar o cartão.');
+            return;
+        }
+        if (!cardInfo.imgSrc) {
+            displayFeedback('Por favor, adicione a imagem antes de salvar o cartão.');
+            return;
+        }
+        if (!cardInfo.title) {
+            displayFeedback('Por favor, preencha o título antes de salvar o cartão.');
+            return;
+        }
         const newCard = {
-            imgSrc: imgPreviewRef.current?.src || '',
+            imgSrc: imgPreviewRef.current?.src,
             backgroundColor: colorPickerRef.current?.value || '#ffff',
-            title: titleInputRef.current?.value || 'Título da imagem',
+            title: titleInputRef.current?.value,
             audioSrc: audioElementRef.current?.src || '' || '',
             audioName: ''
         };
         onSaveCard(newCard);
-    };
-    const handlePlayPauseAudio = () => {
-        const audioElement = audioElementRef.current;
-
-        if (audioElement.paused) {
-            audioElement.play();
-        } else {
-            audioElement.pause();
-        }
+        closeOpen();
     };
 
     const resetCard = () => {
         setCardInfo({
             imgSrc: "",
             backgroundColor: "#ffffff",
-            title: "Título da imagem",
+            title: "",
             audioSrc: "",
             audioName: ""
         });
@@ -130,13 +145,21 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                         </button>
                     </div>
                     <div className="wrapper_insputs">
+                        {feedbackMessage && (
+                            <div className='feedbackMessage'>
+                                <p className='feedbackP'>{feedbackMessage}</p>
+                            </div>
+                        )}
+
                         <div>
+
                             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }}>
                                 <div id="fileInputContainer"></div>
                                 <img ref={imgPreviewRef} src={cardInfo.imgSrc} alt="Pré-visualização da imagem" />
                                 <h1 className='title'>{cardInfo.title}</h1>
                             </div>
                         </div>
+
                         <div>
                             <label>*Escolha a Imagem:</label>
                             <input
@@ -146,7 +169,7 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                                 accept="image/*"
                                 onChange={handleInputChange}
                             />
-                            {/* <span id="imageNameDisplay"></span> */}
+
                         </div>
                         <div>
                             <label>Escolha o áudio:</label>
@@ -167,10 +190,6 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                             <input className="inputs" type="text" id="titleInput" placeholder="Insira o título do cartão" ref={titleInputRef} onChange={handleInputChange} />
                         </div>
                         <div>
-                            {/* <button className="styleButton" id="playPauseButton" onClick={handlePlayPauseAudio}>
-                                {audioElementRef.current?.paused ? 'Reproduzir' : 'Pausar'}
-                            </button>
-                             <audio id="audioElement" ref={audioElementRef} src={cardInfo.audioSrc}></audio>  */}
                             {cardInfo.audioSrc ? (
                                 <div>
                                     <audio className='inputs' controls>
@@ -182,8 +201,22 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                                 <p>Áudio não disponível para reprodução</p>
                             )}
                         </div>
-                        <button onClick={() => { handleSaveCard(); closeOpen(); }} className="styleButton" id="addButton">Salvar Cartão</button>
-                        <button className="styleButtonReset" id="resetAllButton" onClick={resetCard}>Resetar Cartão</button>
+                        <div className='divModalButton'>
+                            <button
+                                onClick={handleSaveCard}
+                                className="styleButton"
+                                id="addButton"
+                            >
+                                <IoSaveOutline /> Salvar Cartão
+                            </button>
+                            <button
+                                className="styleButtonReset"
+                                id="resetAllButton"
+                                onClick={resetCard}
+                            >
+                                <IoSyncCircleOutline /> Resetar Cartão
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
