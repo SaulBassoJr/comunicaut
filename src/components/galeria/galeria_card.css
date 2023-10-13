@@ -30,3 +30,6 @@
     padding-left: 26px;
 }
 
+.card:hover{
+    transform: scale(1.1);   
+}

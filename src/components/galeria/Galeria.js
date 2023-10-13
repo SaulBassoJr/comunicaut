@@ -108,7 +108,7 @@ function Galeria() {
                     <div className="div-cardg">
                         <ul className='wrapper_card'>
                             {cards.map((card, index) => (
-                                <li key={index}>
+                                <li className='card' key={index}>
                                     <div
                                         onClick={() => openConfirmationModal(index)}
                                         id="moveToPranchaBtn"
@@ -146,7 +146,7 @@ function Galeria() {
                     <div ref={printRef}>
                         <ul className='wrapper_pranchaCard'>
                             {prancha.map((card, index) => (
-                                <li key={index}>
+                                <li className='card' key={index}>
                                     <div
                                         onClick={() => openConfirmationModalRemov(index)}
                                         className='prancha_card'

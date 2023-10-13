@@ -1,16 +1,11 @@
 import React from 'react';
 import './main_modal.css';
-import ConfirmDelet from './modalConfirmDelet';
-import { useState } from 'react';
 import { IoTrashOutline, IoAddCircleOutline } from "react-icons/io5";
 
 const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }) => {
-  const [confirmDelete, setConfirmDelete] = useState(false);
   if (!cardInfo) {
     return null; // Retorna null se cardInfo for undefined ou null
   }
-
-  const { backgroundColor, imgSrc, title, audioSrc } = cardInfo;
   if (isOpen) {
     return (
       <div className="main_modal" >
@@ -23,8 +18,12 @@ const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }
           </div>
           <div className="wrapper_insputs -mprancha">
             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }} >
-              <img src={cardInfo.imgSrc} alt="Pré-visualização" />
-              <h2>{cardInfo.title}</h2>
+              <img className='img' src={cardInfo.imgSrc} alt="Pré-visualização" />
+              <h2 className='title'
+                style={{ fontSize: `${Math.min(28, 270 / cardInfo.title.length)}px` }}
+              >
+                {cardInfo.title}
+              </h2>
             </div>
             {cardInfo.audioSrc ? (
               <div>
@@ -45,7 +44,7 @@ const ConfirmationModal = ({ isOpen, closeModal, onConfirm, onDelete, cardInfo }
               </button>
               <button
                 className="styleButtonReset -excluir"
-                onClick={ onDelete }
+                onClick={onDelete}
               >
                 <IoTrashOutline /> Excluir Cartão
               </button>

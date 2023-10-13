@@ -6,7 +6,7 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
     const [cardInfo, setCardInfo] = useState({
         imgSrc: "",
         backgroundColor: 'white',
-        title: "Título da imagem",
+        title: "",
         audioSrc: "",
         audioName: ""
     });
@@ -69,7 +69,7 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                 });
             } else if (id === 'titleInput') {
                 // Atualize o título em tempo real
-                const title = value || 'Título da imagem';
+                const title = value;
                 setCardInfo({
                     ...cardInfo,
                     title
@@ -155,8 +155,12 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
 
                             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }}>
                                 <div id="fileInputContainer"></div>
-                                <img ref={imgPreviewRef} src={cardInfo.imgSrc} alt="Pré-visualização da imagem" />
-                                <h1 className='title'>{cardInfo.title}</h1>
+                                <img className='img' ref={imgPreviewRef} src={cardInfo.imgSrc} alt="Pré-visualização da imagem" />
+                                <h1
+                                className='title'
+                                >
+                                    {cardInfo.title}
+                                </h1>
                             </div>
                         </div>
 
@@ -182,7 +186,7 @@ function Modal({ isOpen, closeOpen, onSaveCard }) {
                             />
                         </div>
                         <div>
-                            <label>*Escolha a cor de fundo:</label>
+                            <label>Escolha a cor de fundo:</label>
                             <input className="inputs" type="color" id="colorPicker" ref={colorPickerRef} onChange={handleInputChange} value={cardInfo.backgroundColor} />
                         </div>
                         <div>

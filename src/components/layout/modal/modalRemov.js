@@ -15,8 +15,12 @@ const ConfirmationModalRemov = ({ isOpen, closeModal, onConfirm, onDelete, cardI
           </div>
           <div className="wrapper_insputs -mprancha">
             <div className='styleCard' style={{ backgroundColor: cardInfo.backgroundColor }} >
-              <img src={cardInfo.imgSrc} alt="Pré-visualização" />
-              <h2>{cardInfo.title}</h2>
+              <img className='img' src={cardInfo.imgSrc} alt="Pré-visualização" />
+              <h2 className='title'
+                style={{ fontSize: `${Math.min(28, 270 / cardInfo.title.length)}px` }}
+              >
+                {cardInfo.title}
+              </h2>
             </div>
             {cardInfo.audioSrc ? (
               <div>
@@ -33,13 +37,13 @@ const ConfirmationModalRemov = ({ isOpen, closeModal, onConfirm, onDelete, cardI
                 className="styleButton -confirm"
                 onClick={() => { onConfirm(); closeModal(); }}
               >
-                <IoRemoveCircleOutline/> Remover da Prancha
+                <IoRemoveCircleOutline /> Remover da Prancha
               </button>
               <button
                 className="styleButtonReset -excluir"
-                onClick={ onDelete }
+                onClick={onDelete}
               >
-                <IoTrashOutline/> Excluir Cartão
+                <IoTrashOutline /> Excluir Cartão
               </button>
             </div>
           </div>
